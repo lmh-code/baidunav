@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>百度导航条效果</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.nav{
+			width: 687px;
+			height: 40px;
+			margin: 100px auto;
+			background-color: #0958a9;
+			position: relative;
+		}
+		.nav ul.navUl{
+			list-style: none;
+			position: relative;
+			z-index: 10;
+		}
+		.nav ul.navUl li{
+			float: left;
+		}
+		.nav ul.navUl li a{
+			display: block;
+			height: 100%;
+			color:white;
+			padding: 0 20px;
+			line-height: 40px;
+			text-decoration: none;
+			font-weight: bold;
+			font-size: 16px;
+
+		}
+		.bg{
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 70px;
+			height: 40px;
+			background-color: red;
+			z-index: 11;
+			display: none;
+			overflow: hidden;
+		}
+		.bg .navUl2{
+			list-style: none;
+			width: 9999px;
+			position: relative;
+			z-index: 11;
+		}
+		.bg .navUl2 li{
+			float: left;
+		}
+		.bg .navUl2 li a{
+			color:yellow;
+			padding: 0 20px;
+			line-height: 40px;
+			font-weight: bold;
+			font-size: 16px;
+			text-decoration: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="nav">
+		<div class="bg">
+			<ul id="navUl2" class="navUl2">
+				<li class="cur"><a href="#">首页</a></li>
+				<li><a href="#">音乐</a></li>
+				<li><a href="#">新闻</a></li>
+				<li><a href="#">读书</a></li>
+				<li><a href="#">体育</a></li>
+				<li><a href="#">羽毛球</a></li>
+				<li><a href="#">乒乓球</a></li>
+				<li><a href="#">文学</a></li>
+				<li><a href="#">微博</a></li>
+			</ul>
+		</div>
+		
+		<ul id="navUl" class="navUl">
+			<li class="cur"><a href="#">首页</a></li>
+			<li><a href="#">音乐</a></li>
+			<li><a href="#">新闻</a></li>
+			<li><a href="#">读书</a></li>
+			<li><a href="#">体育</a></li>
+			<li><a href="#">羽毛球</a></li>
+			<li><a href="#">乒乓球</a></li>
+			<li><a href="#">文学</a></li>
+			<li><a href="#">微博</a></li>
+		</ul>
+	</div>
+	<script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+	<script type="text/javascript">
+		goToCur();
+		function goToCur(){
+			//计算所有cur之前的元素的宽度，得到的总宽度就是cur这个元素的left值
+			var sum = 0;
+			$("#navUl li.cur").prevAll().each(function(){
+				sum += $(this).innerWidth();
+			});
+			//设置bg这个元素的默认位置，让这个元素藏在cur这个元素的后面
+			$(".bg").show().stop(true).animate({
+				"left" : sum,
+				"width" : $("#navUl li.cur").innerWidth()
+			},200);
+			$("#navUl2").stop(true).animate({"left":-sum},200);
+		}
+
+
+		//触碰每个li的时候发生的事情
+		$("#navUl li").mouseenter(function(){
+			//统计你碰到的这个li前面的所有的兄弟的总宽度。因为这个总宽度就是bg元素的left值
+			var sum = 0;
+			$(this).prevAll().each(function(){
+				sum += $(this).innerWidth();
+			});
+			//设置bg这个元素的默认位置，让这个元素藏在cur这个元素的后面
+			$(".bg").stop(true).animate({
+				"left" : sum,
+				"width" : $(this).innerWidth()
+			},800);
+			//让bg里面的猫腻ul反方向运动
+			$("#navUl2").stop(true).animate({"left":-sum},800);
+		});
+
+		$(".nav").mouseleave(goToCur);
+	</script>
+</body>
+</html>
